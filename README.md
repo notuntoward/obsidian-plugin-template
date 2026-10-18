@@ -36,13 +36,18 @@ This template contains **no plugin logic** — only the tooling and a minimal
 | Dependency updates | Dependabot | monthly |
 | Release build | `release.yml` | on version tags |
 
-## Branch protection (Scorecard)
+## Repository settings, branch protection, and auto-merge
 
-Scorecard's "Branch-Protection" check requires the default branch to block
-force-pushes/deletion and to require a passing status check before merge.
-Branch protection is a repository **setting**, not a file, so it is **not**
-copied when you create a repo from this template — you must enable it in each
-new repo after creation.
+Repository settings are **not** copied when you create a new repository from
+this template — they must be configured once after creating the repo.
+
+This template includes a setup script that:
+1. Enables branch protection on `main` (blocks force-pushes and deletion,
+   requires the "ESLint and build" status check, and requires 1 review for
+   OpenSSF Scorecard compliance).
+2. Enables native repository auto-merge (`allow_auto_merge`).
+3. Grants GitHub Actions permission to approve pull requests so Dependabot patch
+   and minor updates can automatically merge after passing CI.
 
 Set `$REPO` (and `$OWNER` only if different) at the top of the script for your
 platform, then run it (requires `gh` authenticated via `gh auth login`):
