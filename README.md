@@ -33,7 +33,7 @@ This template contains **no plugin logic** — only the tooling and a minimal
 | Browser tests (Playwright) | `npm run test:browser` | local (after `npx playwright install chromium`) |
 | CodeQL (SAST) | `codeql.yml` | push/PR + weekly |
 | OpenSSF Scorecard | `scorecard.yml` | push/PR + weekly |
-| Dependency updates | Dependabot | weekly |
+| Dependency updates | Dependabot | monthly |
 | Release build | `release.yml` | on version tags |
 
 ## Branch protection (Scorecard)
