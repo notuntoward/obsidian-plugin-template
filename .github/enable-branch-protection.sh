@@ -23,7 +23,7 @@ set -euo pipefail
 
 OWNER="notuntoward"
 REPO="obsidian-plugin-template"
-BRANCH="master"
+BRANCH="main"
 
 # GitHub REST API endpoint for branch protection (legacy)
 # https://docs.github.com/rest/branches/branch-protection
