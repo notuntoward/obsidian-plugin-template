@@ -8,6 +8,7 @@
     "allowJs": true,
     "noImplicitAny": true,
     "moduleResolution": "bundler",
+    "paths": { "obsidian": ["./node_modules/obsidian"] },
     "importHelpers": true,
     "isolatedModules": true,
     "strictNullChecks": true,
