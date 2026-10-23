@@ -14,7 +14,9 @@
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "test:browser": "playwright test",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "bundle": "node esbuild.config.mjs production",
+    "verify": "node -e \"const fs = require('fs'); const s = fs.readFileSync('main.js', 'utf8'); const p = process.argv[1]; if (!s.includes(p)) { console.error('Fingerprint not found in main.js:', p); process.exit(1); } else console.log('Fingerprint verified in main.js:', p);\""
   },
   "keywords": [
     "obsidian",
