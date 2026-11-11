@@ -52,17 +52,14 @@ This template includes a setup script that:
 Set `$REPO` (and `$OWNER` only if different) at the top of the script for your
 platform, then run it (requires `gh` authenticated via `gh auth login`):
 
-- **Windows (PowerShell):**
-
-  ```powershell
-  pwsh .github/enable-branch-protection.ps1
-  ```
-
-- **macOS / Linux (bash):**
+- **Windows (Git Bash), macOS, Linux:**
 
   ```bash
   bash .github/enable-branch-protection.sh
   ```
+
+The `.ps1` variant exists for Windows users who prefer PowerShell; agents and
+automation should use the bash script from Git Bash.
 
 Both scripts require write access to the repo. Admins are not restricted, so
 you can still direct-push or force-push when needed. Re-running is idempotent.

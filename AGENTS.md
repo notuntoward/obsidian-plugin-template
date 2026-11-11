@@ -33,7 +33,10 @@ Always edit, test, and build directly in this vault-linked clone (`C:\Users\scot
 
 ## Windows command-line safety & Git rules
 
-- **Use POSIX Bash (Git Bash) or Node.js scripts.** Avoid PowerShell for git operations or file editing. PowerShell on Windows introduces severe traps: backticks (``` ` ```) are escape characters that corrupt Markdown and TypeScript, `Set-Content` defaults to ANSI (destroying UTF-8 quotes and em-dashes), and `&&` chaining is unsupported in Windows PowerShell 5.1.
+- **Always run terminal commands in Git Bash, never PowerShell.** The terminal tool may default to PowerShell; never accept it. Wrap commands as `& "C:\Program Files\Git\bin\bash.exe" -lc "<command>"` or set the tool shell to Git Bash. Never use bare `bash` on Windows (it may resolve to WSL).
+- **Resolve a POSIX shell in order:** Git Bash (`C:\Program Files\Git\bin\bash.exe`, then `C:\Program Files\Git\usr\bin\bash.exe`), MSYS2 (`C:\tools\msys64\usr\bin\bash.exe`), Cygwin, then WSL only when `wsl.exe -l -q` lists a distribution. Probe each with `-lc 'echo ok'`. If you use a fallback, say so once. If none works, stop and ask the user to install Git for Windows; do not run the command in PowerShell.
+- **Never use PowerShell-only tokens:** `Get-ChildItem`, `Get-Content`, `Set-Content`, `Add-Content`, `Out-File`, `Remove-Item`, `Test-Path`, `New-Item`, `Copy-Item`, `Move-Item`, `Select-String`, `Select-Object`, `Where-Object`, `ForEach-Object`, `Write-Output`, `Write-Host`, `Start-Process`, `Invoke-*`, `$env:`, `$LASTEXITCODE`, `if ($?)`, backticks as escapes, and `.ps1` scripts. Use `ls`, `cat`, `printf`, `grep`, `sed`, `awk`, `find`, `test`, `rm`, `$?`, and `&&`/`||` instead.
+- **Use Node.js scripts or the agent's file tools for edits.** PowerShell traps: backticks are escapes that corrupt Markdown/TypeScript, `Set-Content` defaults to ANSI (destroying UTF-8), and `&&` is unsupported in Windows PowerShell 5.1.
 - **Line endings**: All text files use LF line endings (`.gitattributes` specifies `* text=auto eol=lf`). Git replacement notices (`LF will be replaced by CRLF`) are informational confirmations of active normalization, NOT errors. Do not attempt to re-normalize files with scripts.
 - **Git commit messages**: Use `git commit -F`, never `git commit -m`. Use the POSIX bash heredoc pattern:
   ```bash
@@ -55,7 +58,7 @@ Always edit, test, and build directly in this vault-linked clone (`C:\Users\scot
 
 When setting up or configuring a newly created plugin repository (the branch-protection step is for repositories with a reviewer; skip it while working solo with plain git):
 1. Verify GitHub CLI authentication (`gh auth status`).
-2. Run `.github/enable-branch-protection.sh` (bash) or `.github/enable-branch-protection.ps1` (PowerShell).
+2. Run `.github/enable-branch-protection.sh` with Git Bash. The `.ps1` exists for humans who prefer PowerShell; agents must not run it.
    This script:
    - Configures branch protection on `main` (requires 'ESLint and build', 1 approval, blocks force-pushes).
    - Enables native repository auto-merge (`allow_auto_merge`).
