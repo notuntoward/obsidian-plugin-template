@@ -27,6 +27,14 @@ Window, tab group, tab, pop-out, focus, modal-chooser, and color logic comes fro
 
 Template settings match the commons baseline: `minAppVersion` 1.14.0, `obsidian` `~1.14.4`, tsconfig `moduleResolution: bundler` with the `obsidian` paths mapping (without it, a plugin and commons see two copies of the obsidian types). In Vitest, `obsidian` resolves to `tests/__mocks__/obsidian.ts` which re-exports `commons/testing/obsidian-mock`. Settings use Obsidian 1.14 declarative settings (`getSettingDefinitions` and `setControlValue`).
 
+## Settings tabs
+
+- Use the declarative settings API only: `getSettingDefinitions()` plus `getControlValue`/`setControlValue` for custom storage.
+- Never define `display()` in a `PluginSettingTab`. Obsidian 1.13 deprecated it and does not call it when `getSettingDefinitions()` returns a non-empty array.
+- Never build settings rows with `new Setting()` inside the settings tab; use `control` entries or `render` callbacks. `new Setting()` is fine in modals.
+- Refresh dynamic rows with `this.update()`, not `this.display()`.
+- Keep `obsidianmd/settings-tab/no-deprecated-display`, `prefer-setting-definitions`, and `prefer-update-over-display` enabled in ESLint.
+
 ## Vault-linked checkout workflow
 
 Always edit, test, and build directly in this vault-linked clone (`C:\Users\scott\repos\<plugin>`). Obsidian loads its bundle directly through the vault's plugin symlink/junction. Never repoint, replace, or delete the vault junction.
