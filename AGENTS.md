@@ -37,11 +37,18 @@ Template settings match the commons baseline: `minAppVersion` 1.14.0, `obsidian`
 
 ## Vault-linked checkout workflow
 
-Always edit, test, and build directly in this vault-linked clone (`C:\Users\scott\repos\<plugin>`). Obsidian loads its bundle directly through the vault's plugin symlink/junction. Never repoint, replace, or delete the vault junction.
+Always edit, test, and build directly in this cloned repository. If the vault's
+plugin entry is linked to this repository, this repository root is the plugin
+directory Obsidian loads, so `main.js` here is the file Obsidian loads.
+
+Never search for the vault and never mention a vault path. Verify the artifact
+only inside this repository: build, check that `main.js` is fresh, check a unique
+literal, and state its absolute path. Never repoint, replace, or delete the vault
+link, and never change it to expose a worktree.
 
 ## Windows command-line safety & Git rules
 
-- **Always run terminal commands in Git Bash, never PowerShell.** The terminal tool may default to PowerShell; never accept it. Wrap commands as `& "C:\Program Files\Git\bin\bash.exe" -lc "<command>"` or set the tool shell to Git Bash. Never use bare `bash` on Windows (it may resolve to WSL).
+- **Detect the shell once, then stay in it.** Before the first command, run `printf 'shell=%s\n' "$BASH_VERSION"`. If it prints a version, write POSIX commands directly with no launcher. If it prints nothing, the host is PowerShell: do not write PowerShell; use `& "C:\Program Files\Git\bin\bash.exe" -lc '<command>'` for each command, or ask the user to set the host shell to Git Bash. Never author PowerShell cmdlets, `$env:`, `Set-Content`/`Out-File`, backtick escapes, `powershell`/`pwsh`/`-EncodedCommand`, or `.ps1` scripts.
 - **Resolve a POSIX shell in order:** Git Bash (`C:\Program Files\Git\bin\bash.exe`, then `C:\Program Files\Git\usr\bin\bash.exe`), MSYS2 (`C:\tools\msys64\usr\bin\bash.exe`), Cygwin, then WSL only when `wsl.exe -l -q` lists a distribution. Probe each with `-lc 'echo ok'`. If you use a fallback, say so once. If none works, stop and ask the user to install Git for Windows; do not run the command in PowerShell.
 - **Never use PowerShell-only tokens:** `Get-ChildItem`, `Get-Content`, `Set-Content`, `Add-Content`, `Out-File`, `Remove-Item`, `Test-Path`, `New-Item`, `Copy-Item`, `Move-Item`, `Select-String`, `Select-Object`, `Where-Object`, `ForEach-Object`, `Write-Output`, `Write-Host`, `Start-Process`, `Invoke-*`, `$env:`, `$LASTEXITCODE`, `if ($?)`, backticks as escapes, and `.ps1` scripts. Use `ls`, `cat`, `printf`, `grep`, `sed`, `awk`, `find`, `test`, `rm`, `$?`, and `&&`/`||` instead.
 - **Use Node.js scripts or the agent's file tools for edits.** PowerShell traps: backticks are escapes that corrupt Markdown/TypeScript, `Set-Content` defaults to ANSI (destroying UTF-8), and `&&` is unsupported in Windows PowerShell 5.1.
