@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node esbuild.config.mjs",
     "lint": "eslint . --max-warnings=0",
-    "build": "npm run lint && tsc --noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "build": "npm run check && npm test && npm run bundle",
     "version": "node version-bump.mjs && git add manifest.json versions.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "test": "vitest run",
@@ -16,7 +16,9 @@
     "test:browser": "playwright test",
     "test:watch": "vitest",
     "bundle": "node esbuild.config.mjs production",
-    "verify": "node -e \"const fs = require('fs'); const s = fs.readFileSync('main.js', 'utf8'); const p = process.argv[1]; if (!s.includes(p)) { console.error('Fingerprint not found in main.js:', p); process.exit(1); } else console.log('Fingerprint verified in main.js:', p);\""
+    "verify": "node -e \"const fs = require('fs'); const s = fs.readFileSync('main.js', 'utf8'); const p = process.argv[1]; if (!s.includes(p)) { console.error('Fingerprint not found in main.js:', p); process.exit(1); } else console.log('Fingerprint verified in main.js:', p);\"",
+    "typecheck": "tsc --noEmit -skipLibCheck",
+    "check": "npm run lint && npm run typecheck"
   },
   "keywords": [
     "obsidian",
