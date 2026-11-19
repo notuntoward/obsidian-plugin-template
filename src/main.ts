@@ -1,11 +1,11 @@
 import { App, Plugin, PluginSettingTab, SettingDefinitionItem } from "obsidian";
 
 export interface PluginTemplateSettings {
-	mySetting: string;
+	exampleText: string;
 }
 
 export const DEFAULT_SETTINGS: PluginTemplateSettings = {
-	mySetting: "default",
+	exampleText: "default",
 };
 
 export default class ObsidianPluginTemplate extends Plugin {
@@ -21,7 +21,19 @@ export default class ObsidianPluginTemplate extends Plugin {
 	}
 
 	async loadSettings(): Promise<void> {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const savedData: unknown = await this.loadData();
+		const data = isRecord(savedData) ? savedData : {};
+		const savedText = data.exampleText;
+		const legacyText = data.mySetting;
+
+		this.settings = {
+			exampleText:
+				typeof savedText === "string"
+					? savedText
+					: typeof legacyText === "string"
+						? legacyText
+						: DEFAULT_SETTINGS.exampleText,
+		};
 	}
 
 	async saveSettings(): Promise<void> {
@@ -49,7 +61,7 @@ export class TemplateSettingTab extends PluginSettingTab {
 						desc: "An example setting description",
 						control: {
 							type: "text",
-							key: "mySetting",
+							key: "exampleText",
 						},
 					},
 				],
@@ -61,4 +73,8 @@ export class TemplateSettingTab extends PluginSettingTab {
 	async setControlValue(key: string, value: unknown): Promise<void> {
 		await super.setControlValue(key, value);
 	}
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null;
 }

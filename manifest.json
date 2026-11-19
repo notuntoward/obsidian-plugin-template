@@ -1,6 +1,6 @@
 {
 	"id": "obsidian-plugin-template",
-	"name": "Obsidian Plugin Template",
+	"name": "Starter Template",
 	"version": "0.1.0",
 	"minAppVersion": "1.14.0",
 	"description": "Replace this description with what your plugin does.",
